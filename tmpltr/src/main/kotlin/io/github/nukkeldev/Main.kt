@@ -25,14 +25,17 @@ class Template(
         var output = template
 
         for ((k, v) in variables) {
-            val anyValue = arguments[k].let {
-                if (arguments.containsKey(k)) it else (it ?: if (v.optional) {
-                    if (v.wholeline) "\\xRemove" else ""
-                } else error("Required variable '$k' not supplied!"))
-            } ?: run { output = output.replace(v.toString(), if (v.wholeline) "\\xRemove" else "") }.let { "\\xContinue" }
-            if (anyValue == "\\xContinue") continue
-            val value = v.format(anyValue)
-            output = output.replace(v.toString(), value)
+            val anyValue = arguments[k]
+
+            if (anyValue == null) {
+                if ((arguments.containsKey(k) && v.nullable) || (!arguments.containsKey(k) && v.optional)) {
+                    output = output.replace(v.toString(), if (v.wholeline) "\\xRemove" else "")
+                } else {
+                    error("Value '$k' supplied is null, but it was either non-nullable supplied as null or non-optional and not supplied")
+                }
+            } else {
+                output = output.replace(v.toString(), v.format(anyValue))
+            }
         }
 
         return output
@@ -136,8 +139,10 @@ fun main() {
             this.name = "type"
         }
 
+        // GENERIC ARE REQUIRED FOR COMPILATION
         val condition = newVariable<Boolean> {
             this.name = "condition"
+            this.type = Boolean::class.java
             this.formatter = { if (it) "" else "\\xRemove" }
             this.optional = true
             this.wholeline = true
@@ -162,7 +167,6 @@ fun main() {
             setVariable("name", "thisIsACoolFunction")
             setVariable("parameters", listOf("cool: String? = null"))
             setVariable("type", "String")
-            setVariable("condition", false)
             setVariable("nullable", null)
         }
     )
