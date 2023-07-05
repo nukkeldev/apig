@@ -1,4 +1,4 @@
-package util
+package io.github.nukkeldev.util
 
 fun String.capitalize() = if (isNotEmpty()) first().uppercase() + substring(1) else this
 fun String.decapitalize() = if (isNotEmpty()) first().lowercase() + substring(1) else this

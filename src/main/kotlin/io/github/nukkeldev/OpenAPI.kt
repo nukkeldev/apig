@@ -1,7 +1,9 @@
+package io.github.nukkeldev
+
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.*
-import util.formatAsClassName
+import io.github.nukkeldev.util.formatAsClassName
 
 /**
  * Conforms to the (Unextended) OpenAPI 3.0.3 Specs.

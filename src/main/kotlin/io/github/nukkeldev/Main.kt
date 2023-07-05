@@ -1,3 +1,8 @@
+package io.github.nukkeldev
+
+import io.github.nukkeldev.util.formatAsParameterName
+import io.github.nukkeldev.util.logger
+import io.github.nukkeldev.util.toTemplate
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.request.*
@@ -7,9 +12,6 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
-import util.formatAsParameterName
-import util.logger
-import util.toTemplate
 import java.io.File
 import kotlin.io.path.Path
 import kotlin.io.path.createDirectory
@@ -57,7 +59,9 @@ fun main(args: Array<String>) {
     val apiInfo = api.info
     val title = apiInfo.title.formatAsParameterName()
 
-    val outputDirectory = Path("src/main/kotlin/example/$title").toAbsolutePath()
+    val rootDirectory = Path("generated/").toAbsolutePath()
+    if (rootDirectory.notExists()) rootDirectory.createDirectory()
+    val outputDirectory = Path("generated/$title").toAbsolutePath()
     if (outputDirectory.notExists()) outputDirectory.createDirectory()
     val schemaDirectory = Path(outputDirectory.toString(), "schemas").toAbsolutePath()
     if (schemaDirectory.notExists()) schemaDirectory.createDirectory()

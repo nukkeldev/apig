@@ -1,8 +1,10 @@
 @file:Suppress("NAME_SHADOWING")
 
-import util.formatAsClassName
-import util.formatAsParameterName
-import util.toTemplate
+package io.github.nukkeldev
+
+import io.github.nukkeldev.util.formatAsClassName
+import io.github.nukkeldev.util.formatAsParameterName
+import io.github.nukkeldev.util.toTemplate
 import java.io.File
 
 val classTemplate = """
